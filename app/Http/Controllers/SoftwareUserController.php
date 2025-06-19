@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SoftwareUser;
+use App\Models\ProjectIssue;
 use Illuminate\Http\Request;
 
 class SoftwareUserController extends Controller
@@ -156,7 +157,13 @@ class SoftwareUserController extends Controller
     }
 
     // Dashboard methods for each role
-    public function requirementAnalystDashboard()
+    public function dashboard()
+    {
+        // This is a general dashboard redirect - for now redirect to login
+        return redirect('/login');
+    }
+
+    public function requirementsAnalystDashboard()
     {
         $recentIssues = ProjectIssue::orderBy('created_at', 'desc')->take(5)->get();
         return view('dashboard.requirements-analyst', compact('recentIssues'));
