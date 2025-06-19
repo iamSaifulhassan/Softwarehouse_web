@@ -245,8 +245,8 @@
         <div class="content-grid">
             <div class="card">
                 <h2 class="section-title">Create New Issue</h2>
-                
-                <form method="POST" action="/issues/store">
+                  <form method="POST" action="/issues/store">
+                    @csrf
                     <div class="form-group">
                         <label for="title">Issue Title</label>
                         <input type="text" id="title" name="title" required>

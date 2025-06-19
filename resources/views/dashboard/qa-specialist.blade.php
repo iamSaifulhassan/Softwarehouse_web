@@ -231,13 +231,14 @@
                     </div>
                     <div class="task-meta">
                         <span>Developer: {{ $task->developer_name ?? 'Not assigned' }}</span>
-                        <div class="task-actions">
-                            @if($task->status == 'completed')
+                        <div class="task-actions">                            @if($task->status == 'completed')
                                 <form method="POST" action="/issues/approve" style="display: inline;">
+                                    @csrf
                                     <input type="hidden" name="issue_id" value="{{ $task->id }}">
                                     <button type="submit" class="btn btn-approve">Approve</button>
                                 </form>
                                 <form method="POST" action="/issues/reject" style="display: inline;">
+                                    @csrf
                                     <input type="hidden" name="issue_id" value="{{ $task->id }}">
                                     <button type="submit" class="btn btn-reject">Reject</button>
                                 </form>

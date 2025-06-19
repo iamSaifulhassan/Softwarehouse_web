@@ -167,8 +167,8 @@
 
         <div class="form-card">
             <a href="/dashboard/requirements-analyst" class="btn btn-back">← Back to Dashboard</a>
-            
-            <form method="POST" action="/issues/store">
+              <form method="POST" action="/issues/store">
+                @csrf
                 <div class="form-group">
                     <label for="title">Issue Title</label>
                     <input type="text" id="title" name="title" required placeholder="Enter a clear and descriptive title">

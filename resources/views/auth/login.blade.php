@@ -11,8 +11,8 @@
             <div class="login-header">
                 <h2>Welcome Back</h2>
                 <p>Sign in to your account</p>
-            </div>
-              <form method="POST" action="/login" class="login-form">
+            </div>            <form method="POST" action="/login" class="login-form">
+                @csrf
                 <div class="input-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" required>

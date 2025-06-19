@@ -11,8 +11,8 @@
             <div class="register-header">
                 <h2>Join Software House</h2>
                 <p>Create your account to get started</p>
-            </div>
-              <form method="POST" action="/register" class="register-form">
+            </div>            <form method="POST" action="/register" class="register-form">
+                @csrf
                 <div class="input-group">
                     <label for="full_name">Full Name</label>
                     <input type="text" id="full_name" name="full_name" required>

@@ -236,14 +236,15 @@
                     </div>
                     <div class="task-meta">
                         <span>Status: {{ ucfirst($issue->status) }}</span>
-                        <div class="task-actions">
-                            @if($issue->status == 'assigned')
+                        <div class="task-actions">                            @if($issue->status == 'assigned')
                                 <form method="POST" action="/issues/start" style="display: inline;">
+                                    @csrf
                                     <input type="hidden" name="issue_id" value="{{ $issue->id }}">
                                     <button type="submit" class="btn btn-start">Start Work</button>
                                 </form>
                             @elseif($issue->status == 'in_progress')
                                 <form method="POST" action="/issues/complete" style="display: inline;">
+                                    @csrf
                                     <input type="hidden" name="issue_id" value="{{ $issue->id }}">
                                     <button type="submit" class="btn btn-complete">Mark Complete</button>
                                 </form>

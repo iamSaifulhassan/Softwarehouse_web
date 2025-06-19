@@ -217,8 +217,8 @@
                     <div class="issue-item">
                         <div class="issue-title">{{ $issue->title }}</div>
                         <div class="issue-description">{{ $issue->description }}</div>                        <div class="issue-meta">
-                            <span>Priority: {{ ucfirst($issue->priority) }}</span>
-                            <form method="POST" action="/issues/assign" style="display: inline;">
+                            <span>Priority: {{ ucfirst($issue->priority) }}</span>                            <form method="POST" action="/issues/assign" style="display: inline;">
+                                @csrf
                                 <input type="hidden" name="issue_id" value="{{ $issue->id }}">
                                 <select name="developer_id" required>
                                     <option value="">Select Developer</option>
