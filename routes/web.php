@@ -16,32 +16,21 @@ Route::get('/register', [SoftwareUserController::class, 'showRegister']);
 Route::post('/register', [SoftwareUserController::class, 'register']);
 Route::get('/logout', [SoftwareUserController::class, 'logout']);
 
-// Dashboard
+// Dashboard routes
 Route::get('/dashboard', [SoftwareUserController::class, 'dashboard']);
+Route::get('/dashboard/requirements-analyst', [SoftwareUserController::class, 'requirementsAnalystDashboard']);
+Route::get('/dashboard/team-lead', [SoftwareUserController::class, 'teamLeadDashboard']);
+Route::get('/dashboard/developer', [SoftwareUserController::class, 'developerDashboard']);
+Route::get('/dashboard/qa-specialist', [SoftwareUserController::class, 'qaSpecialistDashboard']);
 
-// User management
-Route::get('/users', [SoftwareUserController::class, 'index']);
-Route::get('/users/create', [SoftwareUserController::class, 'create']);
-Route::post('/users', [SoftwareUserController::class, 'store']);
-Route::get('/users/{softwareUser}', [SoftwareUserController::class, 'show']);
-Route::get('/users/{softwareUser}/edit', [SoftwareUserController::class, 'edit']);
-Route::put('/users/{softwareUser}', [SoftwareUserController::class, 'update']);
-Route::delete('/users/{softwareUser}', [SoftwareUserController::class, 'destroy']);
-
-// Issue management
+// Issue management (no IDs in routes)
 Route::get('/issues', [ProjectIssueController::class, 'index']);
 Route::get('/issues/create', [ProjectIssueController::class, 'create']);
-Route::post('/issues', [ProjectIssueController::class, 'store']);
-Route::get('/issues/{projectIssue}', [ProjectIssueController::class, 'show']);
-Route::get('/issues/{projectIssue}/edit', [ProjectIssueController::class, 'edit']);
-Route::put('/issues/{projectIssue}', [ProjectIssueController::class, 'update']);
-Route::delete('/issues/{projectIssue}', [ProjectIssueController::class, 'destroy']);
+Route::post('/issues/store', [ProjectIssueController::class, 'store']);
 
-// Team Lead specific routes
-Route::post('/issues/{projectIssue}/assign', [ProjectIssueController::class, 'assign']);
-
-// Developer specific routes
-Route::post('/issues/{projectIssue}/status', [ProjectIssueController::class, 'updateStatus']);
-
-// QA specific routes
-Route::post('/issues/{projectIssue}/qa', [ProjectIssueController::class, 'qaAction']);
+// Issue actions using POST with issue_id in form data
+Route::post('/issues/assign', [ProjectIssueController::class, 'assign']);
+Route::post('/issues/start', [ProjectIssueController::class, 'start']);
+Route::post('/issues/complete', [ProjectIssueController::class, 'complete']);
+Route::post('/issues/approve', [ProjectIssueController::class, 'approve']);
+Route::post('/issues/reject', [ProjectIssueController::class, 'reject']);

@@ -15,21 +15,24 @@ class SoftwareUserController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ]);
+        $username = $request->input('username');
+        $password = $request->input('password');
 
-        $user = SoftwareUser::where('username', $request->username)
+        if (empty($username) || empty($password)) {
+            return redirect('/login');
+        }
+
+        $user = SoftwareUser::where('username', $username)
                            ->where('is_active', true)
                            ->first();
 
-        if ($user && $user->verifyPassword($request->password)) {
-            session(['user_id' => $user->id, 'user_role' => $user->role]);
-            return redirect('/dashboard');
+        if ($user && $user->verifyPassword($password)) {
+            // Simple redirect based on role
+            $role = str_replace('_', '-', $user->role);
+            return redirect('/dashboard/' . $role);
         }
 
-        return back()->with('error', 'Invalid credentials');
+        return redirect('/login');
     }
 
     public function showRegister()
@@ -39,43 +42,40 @@ class SoftwareUserController extends Controller
 
     public function register(Request $request)
     {
-        $request->validate([
-            'username' => 'required|unique:software_users',
-            'email' => 'required|email|unique:software_users',
-            'password' => 'required|min:6|confirmed',
-            'full_name' => 'required',
-            'role' => 'required|in:requirement_gatherer,developer,qa_specialist,team_lead',
-        ]);
+        $username = $request->input('username');
+        $email = $request->input('email');
+        $password = $request->input('password');
+        $full_name = $request->input('full_name');
+        $role = $request->input('role');
+
+        if (empty($username) || empty($email) || empty($password) || empty($full_name) || empty($role)) {
+            return redirect('/register');
+        }
+
+        // Check if user already exists
+        $existingUser = SoftwareUser::where('username', $username)
+                                   ->orWhere('email', $email)
+                                   ->first();
+
+        if ($existingUser) {
+            return redirect('/register');
+        }
 
         $user = new SoftwareUser();
-        $user->username = $request->username;
-        $user->email = $request->email;
-        $user->password = $request->password; // Will be hashed in model
-        $user->full_name = $request->full_name;
-        $user->role = $request->role;
+        $user->username = $username;
+        $user->email = $email;
+        $user->password = $password; // Will be hashed in model
+        $user->full_name = $full_name;
+        $user->role = $role;
         $user->is_active = true;
         $user->save();
 
-        session(['user_id' => $user->id, 'user_role' => $user->role]);
-        return redirect('/dashboard')->with('success', 'Registration successful');
+        return redirect('/login');
     }
 
     public function logout()
     {
-        session()->flush();
         return redirect('/login');
-    }
-
-    public function dashboard()
-    {
-        if (!session('user_id')) {
-            return redirect('/login');
-        }
-
-        $user = SoftwareUser::find(session('user_id'));
-        $role = session('user_role');
-
-        return view('dashboard.' . $role, compact('user'));
     }
 
     /**
@@ -153,5 +153,38 @@ class SoftwareUserController extends Controller
     {
         $softwareUser->delete();
         return redirect('/users')->with('success', 'User deleted successfully');
+    }
+
+    // Dashboard methods for each role
+    public function requirementAnalystDashboard()
+    {
+        $recentIssues = ProjectIssue::orderBy('created_at', 'desc')->take(5)->get();
+        return view('dashboard.requirements-analyst', compact('recentIssues'));
+    }
+
+    public function teamLeadDashboard()
+    {
+        $unassignedIssues = ProjectIssue::where('status', 'new')->get();
+        $developers = SoftwareUser::where('role', 'developer')->where('is_active', true)->get();
+        $teamMembers = SoftwareUser::where('role', '!=', 'team_lead')->where('is_active', true)->get();
+        
+        return view('dashboard.team-lead', compact('unassignedIssues', 'developers', 'teamMembers'));
+    }
+
+    public function developerDashboard()
+    {
+        // For now, get all issues that are assigned or in progress
+        $issues = ProjectIssue::whereIn('status', ['assigned', 'in_progress'])->get();
+        $totalTasks = ProjectIssue::count();
+        $completedTasks = ProjectIssue::where('status', 'completed')->count();
+        $inProgressTasks = ProjectIssue::where('status', 'in_progress')->count();
+        
+        return view('dashboard.developer', compact('issues', 'totalTasks', 'completedTasks', 'inProgressTasks'));
+    }
+
+    public function qaSpecialistDashboard()
+    {
+        $testingTasks = ProjectIssue::where('status', 'completed')->get();
+        return view('dashboard.qa-specialist', compact('testingTasks'));
     }
 }
