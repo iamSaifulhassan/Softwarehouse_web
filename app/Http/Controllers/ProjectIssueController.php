@@ -62,7 +62,7 @@ class ProjectIssueController extends Controller
 
         return redirect('/dashboard/team-lead');
     }
-
+    
     // Start working on issue (for developer)
     public function start(Request $request)
     {

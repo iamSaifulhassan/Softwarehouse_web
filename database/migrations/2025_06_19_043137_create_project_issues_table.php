@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->enum('priority', ['low', 'medium', 'high', 'urgent'])->default('medium');
             $table->enum('status', ['new', 'assigned', 'in_progress', 'completed', 'testing', 'approved', 'rejected'])->default('new');
-            $table->foreignId('created_by')->constrained('software_users');
+            $table->foreignId('created_by')->nullable()->constrained('software_users');
             $table->foreignId('assigned_to')->nullable()->constrained('software_users');
             $table->foreignId('assigned_by')->nullable()->constrained('software_users');
             $table->text('rejection_reason')->nullable();

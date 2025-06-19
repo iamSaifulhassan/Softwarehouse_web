@@ -22,6 +22,7 @@ Route::get('/dashboard/requirements-analyst', [SoftwareUserController::class, 'r
 Route::get('/dashboard/team-lead', [SoftwareUserController::class, 'teamLeadDashboard']);
 Route::get('/dashboard/developer', [SoftwareUserController::class, 'developerDashboard']);
 Route::get('/dashboard/qa-specialist', [SoftwareUserController::class, 'qaSpecialistDashboard']);
+Route::get('/team', [SoftwareUserController::class, 'teamLeadDashboard']);
 
 // Issue management (no IDs in routes)
 Route::get('/issues', [ProjectIssueController::class, 'index']);
@@ -34,3 +35,8 @@ Route::post('/issues/start', [ProjectIssueController::class, 'start']);
 Route::post('/issues/complete', [ProjectIssueController::class, 'complete']);
 Route::post('/issues/approve', [ProjectIssueController::class, 'approve']);
 Route::post('/issues/reject', [ProjectIssueController::class, 'reject']);
+
+// Profile CRUD
+Route::get('/profile', [SoftwareUserController::class, 'profile']);
+Route::post('/profile/update', [SoftwareUserController::class, 'updateProfile']);
+Route::post('/profile/delete', [SoftwareUserController::class, 'deleteProfile']);

@@ -7,20 +7,34 @@
 </head>
 <body>
     <div class="login-container">
-        <div class="login-card">
-            <div class="login-header">
+        <div class="login-card">            <div class="login-header">
                 <h2>Welcome Back</h2>
                 <p>Sign in to your account</p>
-            </div>            <form method="POST" action="/login" class="login-form">
+            </div>
+            
+            @if(session('error'))
+                <div class="error-message">
+                    {{ session('error') }}
+                </div>
+            @endif
+            
+            <form method="POST" action="/login" class="login-form">
                 @csrf
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <label for="username">Username *</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="Enter your username" minlength="3">
                 </div>
                 
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <label for="password">Password *</label>
+                    <div style="position:relative;">
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Enter your password" minlength="6" style="padding-right:40px;">
+                        <span onclick="togglePassword('password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;">
+                            <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                        </span>
+                    </div>
                 </div>
                 
                 <button type="submit" class="login-btn">
@@ -42,9 +56,10 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg,rgb(4, 22, 41),rgb(2, 53, 104));
             min-height: 100vh;
+            color: #183153;
         }
 
         .login-container {
@@ -56,28 +71,36 @@
         }
 
         .login-card {
-            background: white;
+            background: #fff;
             padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.06);
             width: 100%;
             max-width: 400px;
-        }
-
-        .login-header {
+        }        .login-header {
             text-align: center;
             margin-bottom: 30px;
         }
 
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid #ffcdd2;
+            text-align: center;
+        }
+
         .login-header h2 {
-            color: #333;
+            color:rgb(0, 0, 0);
             margin-bottom: 8px;
             font-size: 28px;
             font-weight: 600;
         }
 
         .login-header p {
-            color: #666;
+            color:rgb(56, 50, 50);
             font-size: 16px;
         }
 
@@ -113,18 +136,20 @@
         .login-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: rgb(1, 19, 37);
+            color: #fff;
             border: none;
             border-radius: 8px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
         }
 
         .login-btn:hover {
-            transform: translateY(-2px);
+            background: rgb(71, 74, 76);
+            color: #fff;
         }
 
         .login-footer {
@@ -137,7 +162,7 @@
         }
 
         .login-footer a {
-            color: #667eea;
+            color: rgb(2, 53, 104);
             text-decoration: none;
             font-weight: 500;
         }
@@ -146,5 +171,18 @@
             text-decoration: underline;
         }
     </style>
+
+    <script>
+        function togglePassword(id, el) {
+            const input = document.getElementById(id);
+            if (input.type === 'password') {
+                input.type = 'text';
+                el.querySelector('svg').style.opacity = 0.5;
+            } else {
+                input.type = 'password';
+                el.querySelector('svg').style.opacity = 1;
+            }
+        }
+    </script>
 </body>
 </html>
