@@ -1,7 +1,6 @@
 services:
   app:
     build: .
-    container_name: laravel_app
     ports:
       - "8000:80"
     volumes:
@@ -11,7 +10,6 @@ services:
 
   mysql:
     image: mysql:8
-    container_name: laravel_mysql
     restart: always
     environment:
       MYSQL_DATABASE: softwarehouse
